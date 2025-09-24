@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://i.imgur.com/Q9cxpjM.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+
+
+<title>5 Team: Dofus Services</title>
+<style>
+  /* Curseur personnalisé */
+  body {
+    cursor: url('https://i.imgur.com/FKjvYdb.png?1'), auto;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background: black;
+    overflow-x: hidden;
+  }
+
+  .clickable-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: inherit;
+  }
+
+  /* Style des étoiles */
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.9;
+    animation: fall 1.5s linear forwards;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(100px) scale(0.5); opacity: 0; }
+  }
+
+  /* Image flottante en bas à droite */
+  #floatingContainer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
+
+  #floatingLink {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+  }
+
+  #floatingImg {
+    width: 100px;
+    height: auto;
+    filter: drop-shadow(0 0 10px white);
+    transition: 0.3s;
+  }
+
+  #floatingImg:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px white);
+  }
+
+  /* Tooltip moderne */
+  .tooltip {
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px 2px white;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: rgba(0,0,0,0.7) transparent transparent transparent;
+    filter: drop-shadow(0 0 5px white);
+  }
+
+  #floatingLink:hover .tooltip {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+/* Import de la police Ubuntu */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.popup-content {
+  font-family: 'Ubuntu', sans-serif;
+  background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+              url('https://static.ankama.com/dofus/ng/modules/homepage/psi/assets/keyart.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  color: white;
+  max-width: 450px;
+  width: 90%;
+  box-shadow: 0 0 30px purple, 0 0 50px white;
+  position: relative;
+  animation: popupAnim 0.5s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes popupAnim {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.popup-content h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: white; /* texte blanc */
+  text-shadow: 0 0 15px white, 0 0 25px white; /* glow blanc uniquement */
+}
+
+.popup-content p {
+  font-size: 16px;
+  color: #ddd;
+  line-height: 1.5;
+  margin: 10px 0 20px 0;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.popup-img {
+  max-width: 350px;
+  border-radius: 15px;
+  /* Glow uniquement sur pixels visibles */
+  filter: drop-shadow(0 0 15px white) drop-shadow(0 0 10px white);
+  transition: transform 0.3s;
+}
+
+.popup-img:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
+/* Bouton “Découvrir” plus pro */
+.btn {
+  font-family: 'Ubuntu', sans-serif;
+  background-color: #6a0dad; /* violet professionnel */
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #7b1fc5;
+  transform: scale(1.05);
+}
+
+/* Croix rouge avec contour rond style Mac OS */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,0,0,0.1);
+  border: 2px solid red;
+  border-radius: 50%;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.close:hover {
+  transform: scale(1.2) rotate(90deg);
+  background: rgba(255,0,0,0.2);
+}
+
+/* Classe pour afficher le pop-up */
+.popup.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* Style du bandeau */
+.top-banner {
+  width: 100%;
+  background-color: #ff4d4d; /* rouge clair */
+  color: white;
+  text-align: center;
+  padding: 8px 10px;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  position: fixed;
+  top: -50px; /* départ hors écran pour animation */
+  left: 0;
+  z-index: 9999;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: top 0.5s ease-in-out; /* animation glissante */
+}
+
+.top-banner.show {
+  top: 0; /* apparait en glissant depuis le haut */
+}
+
+.close-banner {
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 5px;
+  user-select: none;
+  transition: transform 0.2s;
+}
+
+.close-banner:hover {
+  transform: scale(1.2);
+}
+
+/* Décaler le contenu sous la bannière */
+body.banner-visible {
+  margin-top: 40px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- Musique de fond autoplay -->
+<audio id="bgMusic" autoplay loop>
+  <source src="frigost.mp3" type="audio/mpeg">
+  Votre navigateur ne supporte pas la lecture audio.
+</audio>
+
+<!-- Bannière moderne -->
+<div id="top-banner" class="top-banner">
+  BIENVENUE SUR 5-TEAM.LOL | UTILISEZ LE CODE:<strong>5FIRST</strong>POUR 10% DE REDUCTION | DISCORD.GG/5TEAM
+  <span id="close-banner" class="close-banner">&times;</span>
+</div>
+
+
+<!-- GIF vertical -->
+<img src="https://i.imgur.com/ZHIC8AM.gif" alt="Image Cliquable" class="clickable-img">
+
+<!-- Image flottante -->
+<div id="floatingContainer">
+  <a href="https://discord.gg/5team" id="floatingLink">
+    <img src="https://static.wikia.nocookie.net/dofus/images/7/78/Miaumiau.png/revision/latest?cb=20220708145131&path-prefix=es" alt="Image flottante" id="floatingImg">
+    <span class="tooltip">Clique ici!</span>
+  </a>
+</div>
+<!-- Pop-up NFT/Futuriste -->
+<div id="popup" class="popup">
+  <div class="popup-content">
+    <span id="closePopup" class="close">&times;</span>
+    <h2>Nouveau pack: Songevant</h2>
+    <p>Profite de nos services Ogrines pour acheter le nouveau pack Songevant arrivée dans la nouvelle mise à jour: Le Puits des Songes Infinis.</p>
+    <!-- Image centrée dans le pop-up -->
+    <div class="image-container">
+      <img src="https://static.ankama.com/shops/img/article/17834/original_28094_all.png" alt="Image Pop-up" class="popup-img">
+    </div>
+    <!-- Bouton en dessous de l'image -->
+    <a href="https://discord.gg/5team" class="btn">Découvrir</a>
+  </div>
+</div>
+
+<script>
+  // Curseur étoiles
+  const colors = ['white', 'purple', 'white', 'purple'];
+  const sizes = [4, 5, 6, 7];
+
+  document.addEventListener('mousemove', e => {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = sizes[Math.floor(Math.random() * sizes.length)];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    star.style.background = color;
+    star.style.left = e.pageX + 'px';
+    star.style.top = e.pageY + 'px';
+    document.body.appendChild(star);
+    setTimeout(() => star.remove(), 1500);
+  });
+
+  const audio = document.getElementById('bgMusic');
+audio.volume = 0.3;
+
+// Autoplay après interaction (pour contourner le blocage navigateur)
+document.addEventListener('click', () => {
+  audio.play().catch(e => console.log('Autoplay bloqué :', e));
+});
+
+window.addEventListener('load', () => {
+  const popup = document.getElementById('popup');
+  const closeBtn = document.getElementById('closePopup');
+
+  // Affiche le pop-up au chargement avec petit délai
+  setTimeout(() => {
+    popup.classList.add('show');
+  }, 500);
+
+  // Fermer le pop-up au clic sur la croix
+  closeBtn.addEventListener('click', () => {
+    popup.classList.remove('show');
+  });
+
+  // Fermer le pop-up si l'utilisateur clique en dehors
+  popup.addEventListener('click', (e) => {
+    if(e.target === popup) {
+      popup.classList.remove('show');
+    }
+  });
+});
+// Faire apparaître la bannière et gérer la fermeture
+document.addEventListener("DOMContentLoaded", () => {
+  const banner = document.getElementById("top-banner");
+  const close = document.getElementById("close-banner");
+
+  // Afficher la bannière avec animation
+  setTimeout(() => {
+    banner.classList.add("show");
+    document.body.classList.add("banner-visible");
+  }, 500); // léger délai au chargement
+
+  // Fermer la bannière au clic
+  close.addEventListener("click", () => {
+    banner.classList.remove("show");
+    document.body.classList.remove("banner-visible");
+  });
+});
+
+</script>
+
+</body>
+</html>
